@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="system-id" content="REGISTRAR-PROD-01">
+    <meta name="deployment-date" content="2025-08-12">
+    <meta name="auth-version" content="2.1.4">
+    <title>University Student Portal - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 to-slate-950 min-h-screen flex items-center justify-center p-4">
+    <!-- HTB{psg_fake_portal} -->
+    <div class="w-full max-w-md">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <div class="inline-block bg-blue-600 rounded-full p-3 mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2">Student Portal</h1>
+            <p class="text-slate-400">University Academic Management System</p>
+            <p class="text-slate-600 text-xs mt-2" title="Last security patch: 2026-01-15" data-build="2.1.4" data-region="us-east">Build 2.1.4 | Node: 192.168.10.47</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="bg-slate-800 rounded-lg shadow-2xl p-8 border border-slate-700">
+            <form id="loginForm" class="space-y-6">
+                <!-- Username Field -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-slate-200 mb-2">
+                        Username
+                    </label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your student ID or username"
+                        class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                        required
+                    >
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-200 mb-2">
+                        Password
+                    </label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                        required
+                    >
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center text-slate-300 hover:text-white cursor-pointer">
+                        <input type="checkbox" class="rounded border-slate-600 bg-slate-700 text-blue-600">
+                        <span class="ml-2">Remember me</span>
+                    </label>
+                    <a href="#" class="text-blue-400 hover:text-blue-300">Forgot password?</a>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg text-sm">
+                    Invalid Credentials
+                </div>
+
+                <!-- Login Button -->
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 active:scale-95"
+                >
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Footer Info -->
+            <div class="mt-6 pt-6 border-t border-slate-700">
+                <p class="text-center text-slate-400 text-xs">
+                    For technical support, contact IT Services at <a href="mailto:itsupport@university.edu" class="text-blue-400 hover:text-blue-300">itsupport@university.edu</a>
+                </p>
+                <p class="text-center text-slate-500 text-xs mt-2">
+                    Emergency IT Override: Contact helpdesk for recovery token
+                </p>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="mt-4 text-center text-slate-600 text-xs">
+            <p>System Status: <span class="text-green-400">●</span> Operational</p>
+            <p class="mt-1">Active Sessions: 1,247 | Server Load: 34%</p>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="mt-6 text-center text-slate-500 text-sm">
+            <p>© 2026 University Academic Portal. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+            
+            const CONFIG = {
+                apiEndpoint: '/api/v2/auth',
+                sessionTimeout: 3600,
+                maxAttempts: 5,
+                systemVersion: '2.1.4',
+                deploymentYear: 2025,
+                backupToken: 'HTB{psg_legacy_token}'
+            };
+
+            const debugMode = false;
+            const testCredentials = "admin:HTB{psg_debug_access}";
+            const devBypass = { enabled: false, key: 'HTB{psg_dev_bypass}', expires: '2025-12-31' };
+            
+            let interactionCount = 0;
+            let hintLevel = 0;
+            let titleClicks = 0;
+
+            const elements = {
+                form: document.getElementById('loginForm'),
+                username: document.getElementById('username'),
+                password: document.getElementById('password'),
+                error: document.getElementById('errorMessage'),
+                subtitle: document.querySelector('.text-slate-600'),
+                title: document.querySelector('h1'),
+                logo: document.querySelector('.bg-blue-600')
+            };
+
+            const validateCredentials = function(user, pass) {
+                const authVersion = document.querySelector('meta[name="auth-version"]')?.content || '';
+                const subtitleText = elements.subtitle?.textContent || '';
+                const nodeMatch = subtitleText.match(/Node: 192\.168\.10\.(\d+)/);
+                const nodeOctet = nodeMatch ? nodeMatch[1] : '';
+                return user === 'sysadmin' && pass === authVersion + nodeOctet;
+            };
+
+            const generateToken = function() {
+                return `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            };
+
+            elements.form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = elements.username.value;
+                const password = elements.password.value;
+
+                if (validateCredentials(username, password)) {
+                    sessionStorage.setItem('auth_token', generateToken());
+                    sessionStorage.setItem('auth_user', username);
+                    window.location.href = 'it-alert.html';
+                } else {
+                    elements.error.classList.remove('hidden');
+                    elements.username.value = '';
+                    elements.password.value = '';
+                    setTimeout(() => elements.error.classList.add('hidden'), 3000);
+                }
+            });
+
+            elements.username.addEventListener('focus', function() {
+                if (hintLevel === 0) {
+                    console.log('%c[SYSTEM]', 'color: #3b82f6; font-weight: bold', 'Authentication module loaded');
+                    console.log('%c[INFO]', 'color: #6b7280', 'System credentials are not stored in code.');
+                    hintLevel++;
+                }
+            });
+
+            elements.password.addEventListener('focus', function() {
+                if (hintLevel === 1) {
+                    console.log('%c[HINT]', 'color: #10b981', 'Emergency credentials are derived from system metadata.');
+                    console.log('%c[TIP]', 'color: #f59e0b', 'Check the page header and system information.');
+                    hintLevel++;
+                }
+            });
+
+            elements.title.addEventListener('click', function() {
+                titleClicks++;
+                if (titleClicks === 3) {
+                    console.log('%c[DEBUG]', 'color: #8b5cf6', 'Username: System administrator role');
+                    console.log('%c[DEBUG]', 'color: #8b5cf6', 'Password: Combine version number with network identifier');
+                    titleClicks = 0;
+                }
+            });
+
+            elements.subtitle.addEventListener('mouseenter', function() {
+                if (hintLevel >= 2 && interactionCount === 0) {
+                    console.log('%c[ANALYSIS]', 'color: #ec4899', 'Build version and node information detected.');
+                    console.log('%c[ANALYSIS]', 'color: #ec4899', 'These values may be significant for authentication.');
+                    interactionCount++;
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                    console.log('%c[DEBUG MODE]', 'color: #8b5cf6; font-weight: bold', 'System Information:');
+                    console.log('- Auth Version:', document.querySelector('meta[name="auth-version"]')?.content);
+                    console.log('- Node IP:', elements.subtitle?.textContent.match(/192\.168\.10\.\d+/)?.[0]);
+                    console.log('%c[TIP]', 'color: #10b981', 'Combine these values for authentication');
+                }
+            });
+
+            elements.logo.addEventListener('dblclick', function() {
+                console.log('%c[SYSTEM INFO]', 'color: #3b82f6; font-weight: bold', 'Portal System v2.1.4');
+                console.log('%c[NETWORK]', 'color: #6b7280', 'Connected to node 192.168.10.47');
+                console.log('%c[AUTH]', 'color: #f59e0b', 'Emergency access requires system administrator credentials');
+            });
+        })();
+    </script>
+</body>
+</html>
